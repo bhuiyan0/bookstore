@@ -1,0 +1,51 @@
+.modal-xl {
+  max-width: 1140px;
+}
+
+tbody tr td{
+  text-align: center;
+  font-size: 14px;
+}
+
+a{
+  cursor: pointer;
+}
+
+.m-container {
+  display: flex;
+  flex-direction: column;
+  margin: 10px 10px 0 10px;
+}
+
+.m-container > * {
+  width: 100%;
+}
+
+.filter-card {
+  margin: 0;
+  padding: 0;
+  height: 100px;
+}
+
+.filter-card > .card-header{
+    padding: 8px;
+}
+
+.filter-card > .card-body{
+    padding: 0px;
+}
+
+
+/* @media print {
+  .body * {
+    visibility: hidden;
+  }
+  #section-to-print, #section-to-print * {
+    visibility: visible;
+  }
+  #section-to-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+} */

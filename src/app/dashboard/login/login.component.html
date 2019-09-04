@@ -1,0 +1,40 @@
+<div>
+  <button routerLink='/'>Back to Root</button>
+</div>
+<div class="login-register" style="background-image:url(../../../assets/images/background/login-register.jpg);">
+  <div class="login-box card">
+    <div class="card-body">
+      <form class="form-horizontal form-material" id="loginform" [formGroup]="loginForm">
+        <h3 class="text-center m-b-20">Sign In</h3>
+        <div class="form-group ">
+          <div class="col-xs-12">
+            <input class="form-control p-1" type="text" required="" formControlName="userName" placeholder="Username">
+            <span class="text-danger" *ngIf="loginForm.controls.userName.touched && loginForm.controls.userName.hasError('required')">Username is required</span>
+          </div>
+        </div>
+       
+        <div class="form-group">
+          <div class="col-xs-12">
+            <input class="form-control p-1" type="password" required="" formControlName="password" placeholder="Password">
+            <span  class="text-danger" *ngIf="loginForm.controls.password.touched && loginForm.controls.password.hasError('required')">Password is required</span>
+          </div>
+        </div>
+        
+
+        <div class="form-group">
+          <span *ngIf="isLoginError" class="text-danger text-center">
+            Incorrect username or password
+          </span>
+        </div>
+        <div class="form-group text-center">
+          <div class="col-xs-12 p-b-20">
+            <button class="btn btn-block btn-lg btn-info btn-rounded" [disabled]="!loginForm.valid" (click)="Login()"
+              type="button">Log In
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+  

@@ -1,0 +1,185 @@
+<div class="row page-titles">
+  <div class="col-md-3">
+    <h2>Add New Book</h2>
+  </div>
+
+  <div class="col-md-9 align-self-center text-right">
+    <div class="d-flex justify-content-end align-items-center">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink='/dashboard'>Dashboard</a></li>
+        <li class="breadcrumb-item" ><a routerLink='/dashboard/book'>Book</a></li>
+        <li class="breadcrumb-item active">Create Book</li>
+      </ol>
+      <button type="button" class="btn btn-default d-none d-lg-block m-l-15" routerLink='/dashboard/book'>Back to
+        list</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="card">
+  <form [formGroup]='bookForm' (ngSubmit)='submit()' noValidate>
+    <div class="card-body ">
+      <div class='row' style='margin-bottom: 0'>
+        <div class="col-md-4">
+          <div class="author-container" noValidate>
+            <mat-form-field class="form-element" appearance="fill">
+              <input matInput placeholder="Book Name" formControlName="bookName">
+                 <mat-error *ngIf="bookForm.controls.bookName.hasError('required')">
+                  Book Name is <strong>required</strong>
+              </mat-error>
+          </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Select category</mat-label>
+              <mat-select formControlName='categoryId'>
+                <mat-option  *ngFor="let item of allCategory " [value]='item.categoryId'>{{item.categoryName}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="bookForm.controls.categoryId.hasError('required')">
+                Category is <strong>required</strong>
+             </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Written by</mat-label>
+              <mat-select formControlName='authorId'>
+                <mat-option  *ngFor="let item of allAuthor " [value]='item.authorId'>{{item.authorName}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="bookForm.controls.authorId.hasError('required')">
+              Author is <strong>required</strong>
+             </mat-error>
+            </mat-form-field >
+            <mat-form-field appearance="fill">
+              <mat-label>Published by</mat-label>
+              <mat-select formControlName='publisherId'>
+                <mat-option  *ngFor="let item of allPublisher " [value]='item.publisherId'>{{item.publisherName}}</mat-option>
+              </mat-select>
+              <mat-error *ngIf="bookForm.controls.publisherId.hasError('required')">
+                Publisher is <strong>required</strong>
+               </mat-error>
+            </mat-form-field>
+            <!-- <mat-form-field appearance="fill">
+              <mat-label>Translated by</mat-label>
+              <mat-select formControlName='translatorId'>
+                <mat-option  *ngFor="let item of allAuthor" [value]='item.authorId'>{{item.authorName}}</mat-option>
+              </mat-select>
+
+            </mat-form-field> -->
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="author-container">
+            <mat-form-field class="form-element" appearance="fill">
+              <input matInput placeholder="Edition" formControlName="edition">
+                 <mat-error *ngIf="bookForm.controls.edition.hasError('required')">
+                 Edition is <strong>required</strong>
+              </mat-error>
+          </mat-form-field>
+          <mat-form-field class="form-element" appearance="fill">
+            <input matInput placeholder="ISBN" formControlName="isbn">
+               <mat-error *ngIf="bookForm.controls.isbn.hasError('required')">
+                Isbn is <strong>required</strong>
+            </mat-error>
+        </mat-form-field>
+            <mat-form-field class="form-element" appearance="fill">
+              
+              <input matInput type='number' placeholder="Number Of Pages"required formControlName='numberOfPage'>
+              <mat-error *ngIf="bookForm.controls.numberOfPage.hasError('required')">
+                Number of Page is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="bookForm.controls.numberOfPage.hasError('min')">
+             Number of Pages Should be positive 
+          </mat-error>
+            </mat-form-field>
+            <mat-form-field appearance="fill">
+              <mat-label>Language</mat-label>
+              <input matInput type='text' formControlName='language'>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="author-container">
+            <mat-form-field class="form-element" appearance="fill">
+              <input matInput type="number" placeholder="Cost Price" formControlName="costPrice">
+                 <mat-error *ngIf="bookForm.controls.costPrice.hasError('required')">
+                Cost Price is <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="bookForm.controls.costPrice.hasError('min')">
+              Cost Price Should be positive 
+              </mat-error>
+          </mat-form-field>
+          <mat-form-field class="form-element" appearance="fill">
+            <input matInput type="number"  placeholder="Selling Price" formControlName="sellingPrice">
+               <mat-error *ngIf="bookForm.controls.sellingPrice.hasError('required')">
+              Selling Price is <strong>required</strong>
+            </mat-error>
+            <mat-error *ngIf="bookForm.controls.sellingPrice.hasError('min')">
+              Selling Price Should be positive 
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="form-element" id='quantity' appearance="fill">
+          <input matInput type="number"  placeholder="Current Quantity" formControlName="quantity">
+             <mat-error *ngIf="bookForm.controls.quantity.hasError('required')">
+          Quantity is <strong>required</strong>
+          </mat-error>
+          <mat-error *ngIf="bookForm.controls.quantity.hasError('min')">
+            Quantity Should be positive 
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form-element" appearance="fill">
+        <input matInput type="number"  placeholder="Record Level" formControlName="reorderLevel">
+           <mat-error *ngIf="bookForm.controls.reorderLevel.hasError('required')">
+         Record Level is <strong>required</strong>
+        </mat-error>
+        <mat-error *ngIf="bookForm.controls.reorderLevel.hasError('min')">
+          Record level Should be positive 
+      </mat-error>
+    </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class='row'>
+        <div class='col-md-7'>
+          <div class='author-container' style='margin-top:0;'>
+            <mat-form-field appearance="fill">
+              <mat-label>Description</mat-label>
+              <textarea style="min-height: 80px;" matInput formControlName='descriptions'></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class='col-md-5'>
+          <div class='author-container' style='margin:0;'>
+            <div class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Upload</span>
+                </div>
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="inputGroupFile01" formControlName='imageUrl'>
+                  <label class="custom-file-label" for="inputGroupFile01">Choose book image</label>
+                </div>
+              </div>
+            </div>
+            <!-- <div>
+              <img src="../../../../../assets/images/users/1.jpg" width='150px' height='200px' alt="">
+            </div> -->
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row button-group">
+          <div class="col-lg-2 col-md-4"></div>
+          <div class="col-lg-2 col-md-4"></div>
+          <div class="col-lg-2 col-md-4"></div>
+          <div class="col-lg-2 col-md-4">
+              <button type="submit" class="btn btn-block btn-outline-success">Submit</button>
+          </div>
+          <div class="col-lg-2 col-md-4">
+              <button type="reset" class="btn btn-block btn-outline-secondery">Reset</button>
+          </div>
+          <div class="col-lg-2 col-md-4">
+              <button type="button" routerLink='/dashboard/book' class="btn btn-block btn-outline-default">Cancel</button>
+          </div>
+      </div>
+    </div>
+  </form>
+</div>

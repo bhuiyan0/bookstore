@@ -1,0 +1,60 @@
+<div class="container-fluid" style="margin-top: 80px">
+  <div class="row">
+    <div class="col-lg-3">
+      <img src="../../../../assets/side1.jpg" alt="" height="100%" width="100%">
+      
+    </div>
+    <div class="col-lg-9">
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+
+            <div class="col-2">
+              <div class="browse__meta--thumbnail">
+                <img class="img-fluid rounded-circle" alt="Humayun Ahmed books"
+                  src="../assets/avatar.png">
+              </div>
+            </div>
+            <div class="col-10">
+              <h4 class="card-title" id="authorName"></h4>
+              <p id="authorDetails"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Column -->
+        <div class="col-lg-3 col-md-6" *ngFor="let item of books | async">
+          <div class="card">
+            <div class="card-body">
+              <div class="product-img">
+                <img src="../assets/book.png" >
+                <div class="pro-img-overlay">
+                    <a href="javascript:void(0)" class="bg-success" (click)='details(item.bookId)'><i class="ti-search"></i></a>
+      
+                    <a href="javascript:void(0)"  *ngIf="isLoggedIn" class="bg-danger" (click)='addToCart(item.bookId)'><i
+                        class="ti-shopping-cart"></i></a>
+                    <a href="javascript:void(0)" *ngIf="!isLoggedIn" class="bg-danger" (click)='openDialog()'><i
+                        class="ti-shopping-cart"></i></a>
+      
+                    <a href="javascript:void(0)" *ngIf="isLoggedIn" class="bg-primary" (click)='addToWishlist(item.bookId)'><i
+                        class="ti-heart"></i></a>
+                    <a href="javascript:void(0)" *ngIf="!isLoggedIn" class="bg-primary" (click)='openDialog()'><i
+                        class="ti-heart"></i></a>
+                  </div>
+              </div>
+              <div class="product-text m-t-10">
+                <span class="pro-price bg-primary"><span>&#2547;</span> {{item.sellingPrice}}</span>
+                <h5 class="card-title m-b-0">{{item.bookName}}</h5>
+                <small class="text-muted db">globe type chair for rest</small>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Column -->
+
+      </div>
+    </div>
+  </div>
+</div>

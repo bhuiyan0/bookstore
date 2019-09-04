@@ -1,0 +1,250 @@
+<div class="row page-titles">
+    <div class="col-md-3">
+        <h2>Author List</h2>
+    </div>
+
+    <div class="col-md-9 align-self-center text-right">
+        <div class="d-flex justify-content-end align-items-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a routerLink='/dashboard'>Dashboard</a></li>
+                <li class="breadcrumb-item active">Author</li>
+            </ol>
+            <button type="button" (click)='createStart()' class="btn btn-info d-none d-lg-block m-l-15"><i
+                    class="fa fa-plus-circle"></i> Create
+                New</button>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive m-t-15">
+            <div id="myTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="dataTables_length" id="myTable_length"><label>Show <select name="myTable_length"
+                                    [(ngModel)]="row" aria-controls="myTable" class="form-control form-control-sm">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                </select> entries</label></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div id="myTable_filter" class="dataTables_filter"><label>Search:<input type="search"
+                                    [(ngModel)]="search" class="form-control form-control-sm" placeholder=""
+                                    aria-controls="myTable"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="myTable" class="table table-bordered table-striped dataTable no-footer" role="grid"
+                            aria-describedby="myTable_info">
+                            <thead class='text-center'>
+                                <tr role="row">
+                                    <th class="sorting" (click)="sort('authorName')" tabindex="0">
+                                        Author Name</th>
+                                    <th class="sorting" (click)="sort('email')" tabindex="0">
+                                        Email Address</th>
+                                    <th class="sorting" (click)="sort('contactNo')" tabindex="0">
+                                        Contact No</th>
+                                    <th tabindex="0">
+                                        Image</th>
+                                    <th tabindex="0" aria-controls="myTable" style="width: 100px;">
+                                        Action</th>
+                                </tr>
+                            </thead>
+                            <tbody
+                                *ngFor="let item of authors | async | orderBy: key : reverse | filter: search | paginate: { itemsPerPage: row, currentPage: p };let i=index;  ">
+                                <tr role="row">
+                                    <td>{{item.authorName}}</td>
+                                    <td>{{item.email}}</td>
+                                    <td>{{item.contactNo}}</td>
+                                    <td>
+                                        <img width="70px" height="70px" src="../../../../assets/user.png"
+                                            alt="Image">
+                                    </td>
+                                    <td style=" margin: 0; padding: 0">
+                                        <a class="btn" (click)='viewData(item.authorId)' title="View"><span
+                                                class="ti-eye"></span></a>
+                                        <a class="btn" (click)='udpateStart(item.authorId)' title="Edit"><span
+                                                class="ti-pencil-alt"></span></a>
+                                        <a class="btn" (click)='deleteStart(item.authorId)' title="Delete"><span
+                                                class="ti-trash"></span></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <pagination-controls (pageChange)="p = $event" maxSize="4"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal for insert, update -->
+<div class="modal fade" id="authorModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+    data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">{{title}}</h4>
+                <button type="button" class="close" (click)='closeModal()' aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+            </div>
+            <form [formGroup]="authorForm" (ngSubmit)='submit()'>
+                <div class="modal-body" nonValidate>
+
+                    <div class="author-container" novalidate>
+                        <mat-form-field class="form-element">
+                            <input matInput placeholder="Name" formControlName="authorName">
+                            <mat-error
+                                *ngIf="authorForm.controls.authorName.hasError('minlength') || authorForm.controls.authorName.hasError('maxlength')">
+                                Author Name should be 4-50 characters long
+                            </mat-error>
+                            <mat-error *ngIf="authorForm.controls.authorName.hasError('required')">
+                                Author Name is <strong>required</strong>
+                            </mat-error>
+
+                        </mat-form-field>
+                        <mat-form-field class="form-element">
+                            <input matInput placeholder="Email Address" formControlName="email">
+                            <mat-error
+                                *ngIf="!authorForm.controls['email'].valid && authorForm.controls['email'].touched">
+                                {{ getErrorEmail() }}
+                            </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field class="form-element">
+                            <input matInput placeholder="Contact No" formControlName="contactNo">
+                            <span matPrefix>+88&nbsp;&nbsp;</span>
+                            <mat-error *ngIf="authorForm.controls.contactNo.hasError('required')">
+                                Contact No is <strong>required</strong>
+                            </mat-error>
+                            <mat-error *ngIf="authorForm.controls.contactNo.hasError('pattern')">
+                                Contact no should be 11 charecters valid bd number
+                            </mat-error>
+                        </mat-form-field>
+                        
+                        <mat-form-field style="width:50%">
+                            <input matInput [matDatepicker]="picker" placeholder="Date of Birth" formControlName="dob">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <textarea matInput placeholder="Address"  formControlName="address"></textarea>
+                        </mat-form-field>
+                        <mat-form-field>
+                            <textarea style="min-height: 70px;" matInput placeholder="Author Info" formControlName="authorInfo"></textarea>
+                        </mat-form-field>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Upload</span>
+                                </div>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="inputGroupFile01" formControlName="imageUrl">
+                                    <label class="custom-file-label" for="inputGroupFile01">Choose Author's
+                                        Image</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <div class="form-element">
+                            <button id="btnSubmit" mat-raised-button color="primary" type="submit"
+                                class="button">Save</button>
+                        </div>
+                        <button type="button" id="btnCancel" class="btn btn-warning"
+                            (click)='closeModal()'>Cancel</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Delete confirm  -->
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h3>Are you sure you want to delete ?</h3>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="submit" (click)='sDeleteConfirm()' class="btn btn-danger btn-ok">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="authorViewModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+    data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Author Information</h4>
+                <button type="button" class="close" (click)='closeViewModal()' aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+            </div>
+
+            <div class="modal-body">
+
+                <div class="author-container">
+
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <div class=" center"><img class="img-circle" src="../../../../assets/user.png"
+                                    width="200"></div>
+                        </div>
+                        <div>
+                            <table class="table table-responsive m-t-15">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-right">Author Name :</td>
+                                        <td id="authorname"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">Email address :</td>
+                                        <td id="authoremail"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">Contact no :</td>
+                                        <td id="authorcontact"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">Address :</td>
+                                        <td id="authoraddress"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="modal-footer">
+
+                    <button type="button" id="btnCancel" class="btn btn-warning"
+                        (click)='closeViewModal()'>Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

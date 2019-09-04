@@ -1,0 +1,136 @@
+<div class="row">
+  <!-- Column -->
+  <div class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-3 col-md-3 col-sm-6">
+            <div class="white-box text-center"> <img src="../assets/book.png" class="img-responsive">
+            </div>
+          </div>
+          <div class="col-lg-9 col-md-9 col-sm-6">
+            <h1 class="box-title m-t-40">{{bookInfo.bookName}}</h1>
+
+
+            <div>
+              <span>Writer : </span>
+              <a href="javascript:void(0)">{{bookInfo.authorName}}</a>
+            </div>
+
+            <div>
+              <span>Publisher : </span>
+              <a href="javascript:void(0)">{{bookInfo.publisherName}}</a>
+            </div>
+
+            <div>
+              <span>Category : </span>
+              <a href="javascript:void(0)">{{bookInfo.categoryName}}</a>
+            </div>
+
+            <div>
+              <span>Edition : </span>
+              <a>{{bookInfo.edition}}</a>
+            </div>
+
+            <div>
+              <span>ISBN : </span>
+              <a>{{bookInfo.isbn}}</a>
+            </div>
+
+            <div>
+              <span>Number of pages : </span>
+              <a>{{bookInfo.numberOfPage}}</a>
+            </div>
+
+            <div>
+              <span>Language : </span>
+              <a>{{bookInfo.language}}</a>
+            </div>
+
+
+
+
+            <h2 class="m-t-40"><span>&nbsp;&#2547;</span> {{bookInfo.sellingPrice}}</h2>
+            <button class="btn btn-dark btn-rounded m-r-5" data-toggle="tooltip" title=""
+              data-original-title="Add to cart" id="btnCart" (click)='addToCart()'><i class="ti-shopping-cart"></i>Add
+              to Cart
+            </button>
+            <button class="btn btn-danger btn-rounded" data-toggle="tooltip" data-original-title="Add to Wishlist"
+              id="btnWishlist" (click)='addToWishlist()'> <i class="ti-heart"></i> Add to Wishlist
+            </button>
+          </div>
+
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card">
+              <div class="card-body">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                  <li class="nav-item"> <a class="nav-link active show" data-toggle="tab" href="#descriptionTab"
+                      role="tab" aria-selected="true"><span class="hidden-sm-up"><i class="ti-book m-r-5"></i></span>
+                      <span class="hidden-xs-down">Description</span></a> </li>
+                  <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#reviewTab" role="tab"
+                      aria-selected="false"><span class="hidden-sm-up"><i class="ti-comment m-r-5"></i></span> <span
+                        class="hidden-xs-down">Review</span></a> </li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content tabcontent-border">
+                  <div class="tab-pane active show" id="descriptionTab" role="tabpanel">
+                    <div class="p-20">
+                      <h3 id="desBookName">
+                        {{bookInfo.bookName}}
+                      </h3>
+                      <p id="description">
+                        {{bookInfo.description}}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="tab-pane p-20" id="reviewTab" role="tabpanel">
+                    <div class="form-group col-md-12 m-t-20">
+                      <label>Your Review*</label>
+                      <form [formGroup]='reviewForm' (ngSubmit)='submit()'>
+                        <textarea class="form-control" rows="5" formControlName="comments"></textarea>
+                        <!-- <mat-error
+                          *ngIf="reviewForm.controls.get('comments').touched && reviewForm.controls.get('comments').errors.required ">
+                          Contact No is <strong>required</strong>
+                        </mat-error> -->
+<!-- 
+                        <mat-error *ngIf="reviewForm.controls.comments.hasError('maxlength')">
+                          Contact No is <strong>required</strong>
+                        </mat-error> -->
+
+                        <div class="col-lg-2 col-md-4">
+                          <button type="submit" class="btn waves-effect waves-light btn-block btn-primary"
+                            id="btnSubmit">Submit</button>
+                        </div>
+                      </form>
+                    </div>
+
+
+                    <!--Book Review Start-->
+                    <div class="p-20">
+                      <ul class="list-unstyled">
+                        <li class="media" *ngFor="let item of reviews">
+                          <figure class="figure">
+                            <img class="d-flex mr-3" src="../assets/images/users/1.jpg" width="60"
+                              alt="Generic placeholder image">
+                            <span>{{item.reviewDate | date:'medium'}}</span>
+                          </figure>
+                          <div class="media-body ml-2">
+                            <p>{{item.comments}}</p>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                    <!--Book Review End-->
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <!-- Column -->
+  </div>

@@ -1,0 +1,55 @@
+<div class="card"></div>
+<div class="container-fluid">
+  <div class="row ">
+    <!-- Column -->
+    <div class="col-md-7 col-lg-7 center">
+      <div class="card">
+        <div class="card-header bg-primary">
+          <h5 class="m-b-0 text-white">Your Wishlist ({{wishlistCount}} items)</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <ng-template #nodata>
+              <h3 class="row offset-1">There is no book in your Wishlist</h3>
+            </ng-template>
+            <table class="table product-overview text-center" *ngIf="wishlistCount>0; else nodata">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Book Name</th>
+                  <th>Written By</th>
+                  <th>Price</th>
+                  <th style="text-align:center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of wishlists">
+                  <td><img src="../../../../assets/book.png" alt="iMac" width="60"></td>
+                  <td>
+                    <h5 class="font-500">{{item.bookName}}</h5>
+                  </td>
+                  <td>
+                    <h5 class="font-500">{{item.authorName}}</h5>
+                  </td>
+
+                  <td align="center" class="font-500"><span>&#2547;&nbsp;</span> {{item.price}}</td>
+                  <td align="center">
+                    <button type="button" class="btn btn-danger btn-circle mr-2" (click)='remove(item.wishListId)'
+                      data-toggle="tooltip" title="Delete"><i class="fa fa-times"></i> </button>
+                    <button type="button" class="btn btn-info btn-circle" (click)='addToCart(item.bookId)' data-toggle="tooltip" title="Add to cart"><i
+                        class="ti-shopping-cart"></i> </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <hr>
+            <button class="btn btn-dark btn-outline" routerLink="/store"><i class="fa fa-arrow-left"></i> Back to
+              home</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Column -->
+  </div>
+
+</div>

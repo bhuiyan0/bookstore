@@ -1,0 +1,139 @@
+<div class="row page-titles">
+    <div class="col-md-3">
+        <h2>Role List</h2>
+    </div>
+
+    <div class="col-md-9 align-self-center text-right">
+        <div class="d-flex justify-content-end align-items-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a routerLink='/dashboard'>Dashboard</a></li>
+                <li class="breadcrumb-item active">Roles</li>
+            </ol>
+            <button type="button" class="btn btn-info d-none d-lg-block m-l-15" (click)='openModal()'><i
+                    class="fa fa-plus-circle"></i> Create
+                New</button>
+        </div>
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive m-t-15 center-div">
+            <div id="myTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="dataTables_length" id="myTable_length"><label>Show <select name="myTable_length"
+                                    [(ngModel)]="row" aria-controls="myTable" class="form-control form-control-sm">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                </select> entries</label></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div id="myTable_filter" class="dataTables_filter"><label>Search:<input type="search"
+                                    [(ngModel)]="search" class="form-control form-control-sm" placeholder=""
+                                    aria-controls="myTable"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="myTable" class="table table-bordered table-striped dataTable no-footer" role="grid"
+                            aria-describedby="myTable_info">
+                            <thead class='text-center'>
+                                <tr role="row">
+                                    <th class="sorting" (click)="sort('name')" tabindex="0">
+                                        Role Name</th>
+                                    <th tabindex="0" aria-controls="myTable" style='width:140px'>
+                                        Action</th>
+                                </tr>
+                            </thead>
+                            <tbody
+                                *ngFor="let item of allRoles | async | orderBy: key : reverse | filter:search | paginate: { itemsPerPage: row, currentPage: p };let i=index;  ">
+                                <tr role="row">
+                                    <td>{{item.name}}</td>
+                                   <td style='width:120px'>
+                                        <!--  <a class="btn" (click)='viewData()' title="View"><span
+                                                class="ti-eye"></span></a> -->
+                                        <!-- <a class="btn" (click)='updateStart()' title="Edit"><span
+                                                class="ti-pencil-alt"></span></a> -->
+                                        <a class="btn" (click)='deleteStart(item.id)' title="Delete"><span
+                                                class="ti-trash"></span></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <!-- <div class="dataTables_info" id="myTable_info" role="status" aria-live="polite">Showing 1 to 10
+                                of 57 entries</div> -->
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                        <pagination-controls (pageChange)="p = $event" maxSize="4"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for insert, update -->
+<div class="modal fade" id="roleModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+    data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Create a role</h4>
+                <button type="button" class="close" (click)='closeModal()' aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+            </div>
+            <form [formGroup]="roleForm" (ngSubmit)='submit()'>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="" class="control-label">Role Name:</label>
+                        <div [ngClass]="{'text-danger': ((roleForm.get('name').touched ||
+                        roleForm.get('name').dirty) &&
+                       roleForm.get('name').errors)}">
+                            <input type="text" class="form-control" name="name" formControlName='name'>
+                            <span class="help-block" *ngIf="((roleForm.get('name').touched ||
+                           roleForm.get('name').dirty) &&
+                           roleForm.get('name').errors)">
+                                <span *ngIf="roleForm.get('name').errors.required">
+                                    Role Name is required
+                                </span>
+                                <span *ngIf="roleForm.get('name').errors.minlength ">
+                                    Minimum 2 characters
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" [disabled]='roleForm.invalid' id="btnSubmit" class="btn btn-success">Save</button>
+                    <button type="button" id="btnCancel" class="btn btn-warning" (click)='closeModal()'>Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Delete confirm  -->
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h3>Are you sure you want to delete ?</h3>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" (click)='DeleteConfirm()' class="btn btn-danger btn-ok">Delete</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

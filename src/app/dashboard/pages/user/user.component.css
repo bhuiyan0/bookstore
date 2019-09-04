@@ -1,0 +1,8 @@
+thead>tr>th {
+    cursor: pointer;
+} 
+.center * {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }

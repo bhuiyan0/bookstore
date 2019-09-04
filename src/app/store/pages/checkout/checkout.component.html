@@ -1,0 +1,187 @@
+<div class="container-fluid">
+  <div class="row page-titles">
+    <div class="col-md-5 align-self-center">
+      <h4 class="text-themecolor">Check out</h4>
+    </div>
+  </div>
+
+  <form [formGroup]='orderForm' (ngSubmit)='submit()'>
+    <div class="row">
+      <div class="col-lg-7">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">CART SUMMARY</h5>
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Book Name</th>
+                    <th>Quantity</th>
+                    <th>Rate</th> 
+                    <th>Item Total</th>
+                  </tr>
+                </thead>
+                <tbody formArrayName="orderLines"
+                  *ngFor="let item of lineArray.controls; let i = index">
+                  <tr class="no-margin" [formGroupName]="i">
+                    <td style="display: none"><input readonly style="display: none" class="no-border" type="text" formControlName="bookId"></td>
+                    <td> <input type="text" readonly class="no-border text-center" formControlName='bookName'></td>
+                    <td><input readonly class="no-border" type="number" formControlName="quantity"></td>
+                    <td><input readonly class="no-border" type="number" formControlName="rate"></td>
+                    <td class="font-500">
+                      <input readonly class="no-border" type="number" formControlName="itemTotal">
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class='row' style='margin-bottom: 10px' >
+              <div class='col-md-10 text-right text-bold'><h5>Net Payable</h5> </div>
+              <div class='col-md-2 text-right text-bold'> <h5>{{netAmount}}</h5></div>
+            </div>
+            <hr>
+
+            <!--Payment Mehod Start-->
+            <div class='row'>
+              <div class='col-md-6'>
+                <div class="form-group">
+                  <label class="control-label">Payment Method *</label>
+                  <select formControlName='paymentMethod' class="form-control custom-select" >
+                    <option value="Cash On Delivery">Cash on delivery</option>
+                    <option value="Bkash">Bkash</option>
+                    <option value="Rocket">Rocket</option>
+                  </select>
+                </div>
+                <div class="form-group" *ngIf="!isCash">
+                  <label class="control-label">Account No. * </label>
+                  <input formControlName='accountNo' type="text" class="form-control"
+                    placeholder="Enter your account no">
+                    <mat-error *ngIf="orderForm.controls.accountNo.touched && orderForm.controls.accountNo.hasError('required')">
+                        Account No is <strong>required</strong>
+                      </mat-error>
+                    <!-- <span class="text-danger" *ngIf="orderForm.get('accountNo').errors.required && orderForm.get('accountNo').touched">
+                      Please enter your phone number 
+                    </span> -->
+                </div>
+                <div class="form-group" *ngIf="!isCash">
+                  <label class="control-label">Transaction No. *</label>
+                  <input formControlName='transactionId' type="text" i class="form-control"
+                    placeholder="Enter your transaction no">
+                    <mat-error *ngIf="orderForm.controls.transactionId.touched && orderForm.controls.transactionId.hasError('required')">
+                        Transaction No is <strong>required</strong>
+                      </mat-error>
+                    <!-- <span class="text-danger" *ngIf="orderForm.get('transactionId').touched && orderForm.get('transactionId').errors.required">
+                        Please enter your transaction id  
+                      </span> -->
+                </div>
+                <div class="form-group">
+                  <label class="control-label">Payment Note (optional)</label>
+                  <textarea formControlName='paymentNote' type="text" class="form-control"></textarea>
+                </div>
+              </div>
+              <div class='col-md-6 col-lg-6' style='padding: 20px 10px 0 10px;' *ngIf="iCash">
+                <h5>Instructions</h5>
+                <ul>
+                  <li>Click on "Confirm Order" </li>
+                  <li>You will get the parcel of happiness within 3-5 working days(in Dhaka).</li>
+                  <li>After receiving the parcel, pay to the delivery man </li>
+                </ul>
+              </div>
+              <div class='col-md-6 col-lg-6' style='padding: 20px 10px 0 10px;' *ngIf="iRocket" >
+                <h5>How to pay</h5>
+                <ul>
+                  <li> Dial *322# </li>
+                  <li>Select Marchent Pay option  </li>
+                  <li>Enter <b>"017427935181"</b>  as Merchant Account No</li>
+                  <li>Write Cart ID in Reference Number Box <b>"{{lastId}}"</b>  </li>
+                  <li>Write Your Amount <b>{{netAmount}}</b> </li>
+                  <li>Write your Secret PIN (XXXX) </li>
+                  <li>You will get a confirmation SMS with Transaction No</li>
+                  <li>provide your bksah number and transaction no in payments details</li>
+                </ul>
+              </div>
+
+              <div class='col-md-6 col-lg-6' style='padding: 20px 10px 0 10px;' *ngIf="iBkash"  >
+                <h5>How to pay</h5>
+                <ul>
+                  <li> Dial *247# </li>
+                  <li>Choose “Payment” </li>
+                  <li>Enter the Merchant bKash Account Number <b>"01742793518"</b> </li>
+                  <li>Enter Cart ID in Reference Number Box <b>"{{lastId}}"</b> </li>
+                  <li>Enter the Counter Number 1 </li>
+                  <li>Write Your Amount <b>{{netAmount}}</b> </li>
+                  <li>Write your Secret PIN (XXXX) to confirm </li>
+                  <li>You will get a confirmation SMS with Transaction No</li>
+                  <li>provide your bksah number and transaction no in payments details</li>
+                </ul>
+              </div>
+            </div>
+
+            <!--Payment Mehod End-->
+            <button type="submit" class="btn btn-block btn-lg btn-primary">Confirm Order</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5">
+        <div class="card" id="billing-form">
+          <div class="card-body">
+            <h4 class="card-title">Your Billing & Shipping Information</h4>
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Your fullname *" formControlName='name'>
+              <mat-error
+                *ngIf="orderForm.controls.name.hasError('minlength') || orderForm.controls.name.hasError('maxlength')">
+                Fullname should be 4-50 characters long
+              </mat-error>
+              <mat-error *ngIf="orderForm.controls.name.hasError('required')">
+                Full Name is <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="orderForm.controls.name.hasError('pattern')">
+                Name contains invalid characters (only alphabetical characters allowed)
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Email Address" formControlName='email'>
+              <mat-error *ngIf="orderForm.controls.email.hasError('required')">
+                Email is required
+              </mat-error>
+              <mat-error *ngIf="orderForm.controls.email.hasError('pattern')">
+                please provide a valid email address Ex: example@mail.com
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Contact No" formControlName="phone">
+              <span matPrefix>+88&nbsp;&nbsp;</span>
+              <mat-error *ngIf="orderForm.controls.phone.hasError('required')">
+                Contact No is <strong>required</strong>
+              </mat-error>
+              <mat-error *ngIf="orderForm.controls.phone.hasError('pattern')">
+                Contact no should be 11 charecters and a valid bd number
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <input type="text" formControlName='district' placeholder="Select District" aria-label="Number" matInput
+                [matAutocomplete]="auto" (ngModelChange)="updatedVal($event)">
+              <mat-autocomplete #auto="matAutocomplete">
+                <mat-option *ngFor="let option of filteredOptions | async" [value]="option"
+                  [ngClass]="{'hide-autocomplete': !showAutocomplete}">
+                  {{option}}
+                </mat-option>
+              </mat-autocomplete>
+              <mat-error *ngIf="orderForm.controls.district.hasError('required')">
+                please select a district
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width">
+              <textarea matInput placeholder="Address" rows="5" formControlName='address'></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>

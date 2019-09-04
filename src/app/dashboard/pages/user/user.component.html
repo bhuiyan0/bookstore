@@ -1,0 +1,297 @@
+<div class="row page-titles">
+    <div class="col-md-3">
+        <h2>User List</h2>
+    </div>
+
+    <div class="col-md-9 align-self-center text-right">
+        <div class="d-flex justify-content-end align-items-center">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a routerLink='/dashboard'>Dashboard</a></li>
+                <li class="breadcrumb-item active">Users</li>
+            </ol>
+            <button type="button" class="btn btn-info d-none d-lg-block m-l-15" (click)='createStart()'><i
+                    class="fa fa-plus-circle"></i> Create
+                New</button>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive m-t-15">
+            <div id="myTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="dataTables_length" id="myTable_length"><label>Show <select name="myTable_length"
+                                    [(ngModel)]="row" aria-controls="myTable" class="form-control form-control-sm">
+                                    <option value="5">5</option>
+                                    <option value="10">10</option>
+                                    <option value="15">15</option>
+                                    <option value="20">20</option>
+                                    <option value="30">30</option>
+                                </select> entries</label></div>
+                    </div>
+                    <div class="col-sm-12 col-md-6">
+                        <div id="myTable_filter" class="dataTables_filter"><label>Search:<input type="search"
+                                    [(ngModel)]="search" class="form-control form-control-sm" placeholder=""
+                                    aria-controls="myTable"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <table id="myTable" class="table table-bordered table-striped dataTable no-footer" role="grid"
+                            aria-describedby="myTable_info">
+                            <thead>
+                                <tr role="row">
+                                    <th class="sorting" (click)="sort('lastName')" tabindex="0">
+                                        First Name</th>
+                                    <th class="sorting" (click)="sort('lastName')" tabindex="0">
+                                        Last Name</th>
+                                    <th class="sorting" (click)="sort('email')" tabindex="0">
+                                        Email Address</th>
+                                    <th class="sorting" (click)="sort('userName')" tabindex="0">
+                                        User Name</th>
+                                    <th tabindex="0" aria-controls="myTable">
+                                        Action</th>
+                                </tr>
+                            </thead>
+                            <tbody
+                                *ngFor="let user of users | async | orderBy: key : reverse | filter:search | paginate: { itemsPerPage: row, currentPage: p };let i=index;  ">
+                                <tr role="row">
+                                    <td>{{user.firstName}}</td>
+                                    <td>{{user.lastName}}</td>
+                                    <td>{{user.email}}</td>
+                                    <td>{{user.userName}}</td>
+
+                                    <td>
+                                        <a class="btn" (click)='viewData(user.id)' title="View"><span
+                                                class="ti-eye"></span></a>
+                                        <!-- <a class="btn" (click)='updateStart()' title="Edit"><span
+                                                class="ti-pencil-alt"></span></a> -->
+                                        <a class="btn" (click)='deleteStart(user.id)' title="Delete"><span
+                                                class="ti-trash"></span></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 col-md-8">
+                        <!-- <div class="dataTables_info" id="myTable_info" role="status" aria-live="polite">Showing 1 to 10
+                            of 57 entries</div> -->
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <pagination-controls (pageChange)="p = $event" maxSize="4"></pagination-controls>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- Modal for insert, update -->
+<div class="modal fade" id="userModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+    data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Register new user</h4>
+                <button type="button" class="close" (click)='closeModal()' aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+            </div>
+            <form id="loginform" [formGroup]="userForm" (ngSubmit)="submit()">
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <div class="col-xs-6 col-md-6">
+                            <input class="form-control" type="text" required="" formControlName="firstName"
+                                placeholder="First Name">
+                            <span class="text-danger" *ngIf="((userForm.get('firstName').touched ||
+                       userForm.get('firstName').dirty) &&
+                       userForm.get('firstName').errors)">
+                                <span *ngIf="userForm.get('firstName').errors.required">
+                                    First Name is required
+                                </span>
+                            </span>
+                        </div>
+                        <div class="col-xs-6  col-md-6">
+                            <input class="form-control" type="text" required="" formControlName="lastName"
+                                placeholder="Last Name">
+                            <span class="text-danger" *ngIf="((userForm.get('lastName').touched ||
+                       userForm.get('lastName').dirty) &&
+                       userForm.get('lastName').errors)">
+                                <span *ngIf="userForm.get('lastName').errors.required">
+                                    Last Name is required
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="col-xs-12">
+                            <input class="form-control" type="text" required="" formControlName="email"
+                                placeholder="Email">
+                            <span class="text-danger" *ngIf="((userForm.get('email').touched ||
+                       userForm.get('email').dirty) &&
+                       userForm.get('email').errors)">
+                                <span *ngIf="userForm.get('email').errors.required">
+                                    Email is required
+                                </span>
+                                <span *ngIf="userForm.get('email').errors.email">
+                                    Valid Email Address is required
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="col-xs-12">
+                            <input class="form-control" type="text" required="" formControlName="userName"
+                                placeholder="User Name">
+                            <span class="text-danger" *ngIf="((userForm.get('userName').touched ||
+                       userForm.get('userName').dirty) &&
+                       userForm.get('userName').errors)">
+                                <span *ngIf="userForm.get('userName').errors.required">
+                                    User Name is required
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <div class="col-xs-12">
+                            <input class="form-control" type="password" required="" formControlName="password"
+                                placeholder="Password">
+                            <span class="text-danger" *ngIf="((userForm.get('password').touched ||
+                       userForm.get('password').dirty) &&
+                       userForm.get('password').errors)">
+                                <span *ngIf="userForm.get('password').errors.required">
+                                    Password is required
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <input class="form-control" appConfirmPassword="password" type="password" required=""
+                                formControlName="confirmPassword" placeholder="Confirm Password">
+                            <span class="text-danger" *ngIf="((userForm.get('confirmPassword').touched ||
+                       userForm.get('confirmPassword').dirty) &&
+                       userForm.get('confirmPassword').invalid)">
+                                <span class="help-block"
+                                    *ngIf="confirmPassword.touched && confirmPassword.errors.required">
+                                    Confirm Password is required
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-xs-4 col-md-4">
+                            <label for="">Roles</label>
+                        </div>
+                        <div class="col-xs-8 col-md-8">
+                            <select class="form-control" formControlName='role'>
+                                <option *ngFor="let item of allRoles" [value]='item.name'>{{item.name}}</option>
+                            </select>
+                        </div>
+
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md-12">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck1">
+                                <label class="custom-control-label" for="customCheck1">I agree to all Terms</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button
+                            class="btn btn-info btn-lg btn-block btn-rounded text-uppercase waves-effect waves-light"
+                            type="submit">Create</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Delete confirm  -->
+<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+    aria-hidden="true" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h3>Are you sure you want to delete ?</h3>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" (click)='DeleteConfirm()' class="btn btn-danger btn-ok">Delete</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal for insert, update -->
+<div class="modal fade" id="userViewModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+    data-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Register new user</h4>
+                <button type="button" class="close" (click)='closeViewModal()' aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="author-container">
+                    <div class="card">
+                        <div class="card-body p-0">
+                            <div class=" center"><img class="img-circle" src="../../../../assets/images/users/5.jpg"
+                                    width="150"></div>
+                        </div>
+                        <div>
+                            <table class="table table-responsive m-t-15">
+                                <tbody>
+                                    <tr>
+                                        <td class="text-right">Full Name :</td>
+                                        <td id="fullName"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">UserName :</td>
+                                        <td id="userName"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">Email :</td>
+                                        <td id="email"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">Phone No :</td>
+                                        <td id="phoneNumber"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-right">Address :</td>
+                                        <td id="address"></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="text-right">Role :</td>
+                                        <td id="role"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="btnCancel" class="btn btn-warning"
+                        (click)='closeViewModal()'>Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

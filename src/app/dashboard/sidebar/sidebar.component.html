@@ -1,0 +1,75 @@
+<aside class="left-sidebar">
+    <!-- Sidebar scroll-->
+    <div class="scroll-sidebar">
+        <!-- User Profile-->
+        <div class="user-profile">
+            <div class="user-pro-body">
+                <div><img src="../assets/user.png" alt="user-img" class="img-circle"></div>
+                <div class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle u-dropdown link hide-menu"
+                        data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" > <span >{{username}}</span>
+                        <span class="caret"></span></a>
+                    <div class="dropdown-menu animated flipInY">
+                        <!-- text-->
+                        <a routerLink='/dashboard/profile' class="dropdown-item" style='cursor: pointer;'><i class="ti-user"></i> My Profile</a>
+                        <!-- text-->
+                        <div class="dropdown-divider"></div>
+                        <!-- text-->
+                        <a (click)='logout()' class="dropdown-item" style='cursor: pointer;'><i class="fa fa-power-off"></i> Logout</a>
+                        <!-- text-->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar navigation-->
+            <nav class="sidebar-nav">
+                <ul id="sidebarnav">
+
+                    <li> <a class="waves-effect waves-dark" routerLink='/dashboard' aria-expanded="false"><i
+                                class="icon-home"></i><span class="hide-menu">Home </span></a>
+                    </li>
+                    <li> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i
+                                class="icon-user"></i><span class="hide-menu">Manage Users</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a routerLink='user'>Users</a></li>
+                            <li><a routerLink='role'>Roles</a></li>
+                        </ul>
+                    </li>
+                    <li> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i
+                                class="icon-book-open"></i><span class="hide-menu">Manage Books</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a routerLink='category'>Categories</a></li>
+                            <li><a routerLink='author'>Authors</a></li>
+                            <li><a routerLink='publisher'>Publishers</a></li>
+                            <li><a routerLink='book'>Books</a></li>
+                        </ul>
+                    </li>
+                    <li> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i
+                                class="icon-handbag"></i><span class="hide-menu">Purchase</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a routerLink='purchase-list'>Purchase List</a></li>
+                            <li><a routerLink='purchase-create'>Add Purchase</a></li>
+                        </ul>
+                    </li>
+                    <li> <a class="waves-effect waves-dark" routerLink='order' aria-expanded="false"><i
+                                class="ti-gift"></i><span class="hide-menu">Orders</span></a>
+                    </li>
+                    <li> <a  class="waves-effect waves-dark disabled" href="javascript:void(0)" aria-expanded="false"><i
+                                class="ti-announcement"></i><span class="hide-menu">Feedback</span></a>
+                    </li>
+                    <li> <a class="has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i
+                                class="icon-layers"></i><span class="hide-menu">Reports</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li><a class="disabled" href="javascript:void(0)">Purchase Report</a></li>
+                            <li><a class="disabled" href="javascript:void(0)">Orders</a></li>
+                            <li><a class="disabled" href="javascript:void(0)">Stock Report</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <!-- End Sidebar navigation -->
+        </div>
+        <!-- End Sidebar navigation -->
+    </div>
+    <!-- End Sidebar scroll-->
+</aside>

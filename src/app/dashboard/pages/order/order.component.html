@@ -1,0 +1,309 @@
+<div class="row page-titles ">
+  <div class="col-md-3">
+    <h2>Order List</h2>
+  </div>
+  <div class="col-md-9 align-self-center text-right">
+    <div class="d-flex justify-content-end align-items-center">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink='/dashboard'>Dashboard</a></li>
+        <li class="breadcrumb-item active">Orders</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <!-- <div class="card border-success bg-secondary filter-card">
+       <div class="card-header bg-success">
+        <h4 class="m-b-0 text-white">Filters</h4>
+      </div>
+      <div class="card-body">
+        <div class='row'>
+          <div class='col-md-3'>
+            <div class="m-container">
+              <mat-form-field>
+                <mat-label>Order Status</mat-label>
+                <mat-select>
+                  <mat-option value="Processing">Processing</mat-option>
+                  <mat-option value="Shipped">Shipped</mat-option>
+                  <mat-option value="Completed">Completed</mat-option>
+                  <mat-option value="Canceled">Canceled</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class='col-md-3'>
+            <div class='m-container'>
+              <mat-form-field>
+                <mat-label>Payment Status</mat-label>
+                <mat-select>
+                  <mat-option value="Paid">Paid</mat-option>
+                  <mat-option value="Due">Due</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class='col-md-2'>
+            <div class='m-container'>
+              <mat-form-field>
+                <mat-label>Start Date</mat-label>
+                <input matInput [matDatepicker]="startDate">
+                <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+                <mat-datepicker #startDate></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class='col-md-2'>
+            <div class='m-container'>
+              <mat-form-field>
+                <mat-label> End Date</mat-label>
+                <input matInput [matDatepicker]="endDate">
+                <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+                <mat-datepicker #endDate></mat-datepicker>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div> -->
+    <div class="table-responsive m-t-15 bg-secondary">
+      <div id="myTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+        <div class="row">
+          <div class="col-sm-12 col-md-6">
+            <div class="dataTables_length" id="myTable_length"><label>Show <select name="myTable_length"
+                  [(ngModel)]="row" aria-controls="myTable" class="form-control form-control-sm">
+                  <option value="5">5</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                  <option value="30">30</option>
+                </select> entries</label></div>
+          </div>
+          <div class="col-sm-12 col-md-6">
+            <div id="myTable_filter" class="dataTables_filter"><label>Search:<input type="search" [(ngModel)]="search"
+                  class="form-control form-control-sm" placeholder="" aria-controls="myTable"></label>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12">
+            <table id="myTable" class="table table-bordered table-striped dataTable no-footer" role="grid"
+              aria-describedby="myTable_info">
+              <thead class='text-center'>
+                <tr role="row">
+                  <th class="sorting" (click)="sort('orderDate')" tabindex="0">
+                    Date</th>
+                  <th class="sorting" (click)="sort('orderId')" tabindex="0">
+                    Invoice No</th>
+                  <th class="sorting" (click)="sort('name')" tabindex="0">
+                    Customer Name</th>
+                  <th class="sorting" (click)="sort('district')" tabindex="0">
+                    District</th>
+                  <th class="sorting" (click)="sort('orderStatus')" tabindex="0">
+                    Order Status</th>
+                  <!-- <th class="sorting" (click)="sort('paymentStatus')" tabindex="0">
+                    Payment status</th> -->
+                  <th class="sorting" (click)="sort('amount')" tabindex="0">
+                    Total Amount</th>
+                  <th tabindex="0">
+                    Action</th>
+                </tr>
+              </thead>
+              <tbody
+                *ngFor="let item of orders  | orderBy: key : reverse | filter: search | paginate: { itemsPerPage: row, currentPage: p };let i=index;  ">
+                <tr role="row">
+                  <td>{{item.orderDate | date:'shortDate'}}</td>
+                  <td>#{{item.orderId}}</td>
+                  <td>{{item.name}}</td>
+                  <td>{{item.district}}</td>
+                  <td>{{item.orderStatus}}</td>
+                  <td class='text-right'>{{item.amount}}</td>
+                  <td style=" padding: 5px">
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        Action
+                      </button>
+                      <div class="dropdown-menu" x-placement="bottom-start"
+                        style="position: absolute;  top: 0px; left: 0px;">
+                        <a class="dropdown-item" (click)='viewData(item.orderId)'>View</a>
+                        <a class="dropdown-item" (click)='updateStart(item.orderId)'>Edit</a>
+                        <!-- <a class="dropdown-item">Delete </a>
+                        <a class="dropdown-item">Print</a> -->
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm-12 col-md-8">
+          </div>
+          <div class="col-sm-12 col-md-4">
+            <pagination-controls (pageChange)="p = $event" maxSize="4"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade no-print" id="OrderDetailsModal" tabindex="-1" role="dialog" aria-hidden="true"
+  data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-xl modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Order Details (<b>Order ID:</b> # {{order.orderId}})</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">×</span></button>
+      </div>
+      <div class="modal-body" id="sectionprint">
+        <div class="row">
+          <div class="col-sm-12">
+            <p class="pull-right"><b>Date: {{today | date:'shortDate'}}</b> </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4" style="border-right: 1px solid black; padding-left: 10px;">
+            <h5 style='color:rgb(20, 94, 179)'> Order Info </h5>
+            <b>Order Id:</b> #{{order.orderId}}<br>
+            <b>Date:</b> {{order.orderDate | date:'shortDate'}}<br>
+            <b>Order Status:</b> {{order.orderStatus}}<br>
+          </div>
+
+          <div class="col-md-4" style='border-right: 1px solid black;'>
+            <h5 style='color:rgb(20, 94, 179);'> Customer Details </h5>
+            <address>
+              <strong>{{order.firstName}} {{order.lastName}}</strong>
+              <br>{{order.userPhone}}
+              <br>Email: {{order.userEmail}}
+              <br>Phone: {{order.userPhone}}
+            </address>
+          </div>
+          <div class="col-md-4">
+            <h5 style='color:rgb(20, 94, 179);'> Shipping Details </h5>
+            <address>
+              <strong>{{order.name}}</strong>
+              <br><b>Email:</b> {{order.email}}
+              <br> <b>Phone:</b> {{order.phone}}
+              <br><b>District:</b> {{order.district}}
+              <br><b>Address</b>: {{order.address}}
+            </address>
+          </div>
+        </div>
+
+        <br>
+        <div class="row">
+          <div class="col-sm-12 col-xs-12">
+            <div class="table-responsive">
+              <table class="table bg-gray">
+                <thead>
+                  <tr class="bg-secondary">
+                    <th>#Sl No</th>
+                    <th>Book Name</th>
+                    <th>Quantity</th>
+                    <th>Rate </th>
+                    <th>Item Total</th>
+                  </tr>
+                </thead>
+                <tbody *ngFor="let item of orderLines; let i=index;">
+                  <tr>
+                    <td> {{i+1}}</td>
+                    <td>{{item.bookName}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.rate}}</td>
+                    <td>{{item.itemTotal}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-6 col-sm-12 col-xs-12" style='padding-left: 80px'>
+            <h5 style='color:rgb(20, 94, 179);'>Payment Info:</h5>
+            <address>
+              <span><b> Payment Method</b>: {{order.paymentMethod}}</span><br>
+              <span><b> Payment Amount</b> : {{order.amount}}</span> <br>
+              <!-- <span *ngIf="!!order.bankName"><b> Bank Name</b>: {{order.bankName}}</span> <br> -->
+              <span *ngIf="!!order.accountNo"><b> Account No</b>: {{order.accountNo}}</span> <br>
+              <span *ngIf="!!order.transactionId"> <b>Transaction No.</b> : {{order.transactionId}}</span> <br>
+
+            </address>
+          </div>
+          <div class="col-md-6 col-sm-12 col-xs-12">
+            <div class="table-responsive">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <th>Net Total Amount: </th>
+                    <td></td>
+                    <td class='text-right'>{{order.amount}}</td>
+                  </tr>
+                  <tr>
+                    <th>Discount:</th>
+                    <td> <b>(-)</b> </td>
+                    <td class="text-right"> 0.00</td>
+                  </tr>
+                  <tr>
+                    <th>Vat:</th>
+                    <td><b>(+)</b></td>
+                    <td class="text-right">
+                      0.00
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Purchase Total:</th>
+                    <td></td>
+                    <td class="text-right">{{order.amount}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-default"  printSectionId="sectionprint" ngxPrint>print</button> 
+        <!-- <button class="btn btn-default" (click)='printDiv("sectionprint")'>print</button> -->
+        <button class="btn btn-info" (click)='updateStart(order.orderId)'>Update Status</button>
+        <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- edit modal -->
+
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Edit Order Status</h4>
+      </div>
+      <form  [formGroup]="statusForm" (ngSubmit)='updateConfirm()'>
+        <div class="modal-body">
+          <select name="" id="" class="form-control" formControlName="orderStatus">
+            <option value="Processing">Processing</option>
+            <option value="Approved">Approved</option>
+            <option value="On Shipping">On Shipping</option>
+            <option value="Completed">Completed</option>
+            <option value="Canceled">Canceled</option>
+            <option value="Returned">Returned</option>
+            <option value="Failed">Failed</option>
+          </select>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Update</button>
+          <button type="button" class="btn btn-default" (click)='closeUpdate()'>Close</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

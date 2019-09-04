@@ -1,0 +1,186 @@
+<div class="row page-titles">
+  <div class="col-md-3">
+    <h2>Add Purchase</h2>
+  </div>
+
+  <div class="col-md-9 align-self-center text-right">
+    <div class="d-flex justify-content-end align-items-center">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a routerLink='/dashboard'>Dashboard</a></li>
+        <li class="breadcrumb-item"><a routerLink='/dashboard/purchase-list'>Purchase</a></li>
+        <li class="breadcrumb-item active">Add Purchase</li>
+      </ol>
+      <button type="button" class="btn btn-info d-none d-lg-block m-l-15" routerLink='/dashboard/purchase-list'><i
+          class="fa fa-list"></i>Go to List</button>
+    </div>
+  </div>
+</div>
+
+
+<form [formGroup]='purchaseForm' (ngSubmit)='submit()'>
+  <div class="card bg-default">
+    <div class="card-body">
+      <div class='row'>
+        <div class='col-md-3'>
+          <div class="purchase-container">
+            <mat-form-field>
+              <mat-label>Publisher Name</mat-label>
+              <mat-select formControlName="publisherId" (selectionChange)='loadBookDropdown($event.value)' >
+                <mat-option  *ngFor="let item of allPublisher " [value]='item.publisherId'>{{item.publisherName}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class='col-md-3'>
+          <div class='purchase-container'>
+            <mat-form-field>
+              <mat-label>Date</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="purchaseDate" >
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class='col-md-3'>
+          <div class='purchase-container'>
+            <mat-form-field>
+              <mat-label>Reference No.</mat-label>
+              <input matInput formControlName="referenceNo">
+            </mat-form-field>
+          </div>
+        </div>
+        <div class='col-md-3'>
+          <div class='purchase-container'>
+            <mat-form-field>
+              <mat-label>Purchase Status</mat-label>
+              <mat-select formControlName="purchaseStatus">
+                <mat-option value="Ordered">Ordered</mat-option>
+                <mat-option value="On Shipping">On Shipping</mat-option>
+                <mat-option value="Received">Received</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-sm-12">
+          <button type="button" class="btn btn-success" [disabled]="purchaseForm.get('purchaseLines').invalid" (click)='addPurchaseLine()'>
+            <i class="ti-plus"></i>
+            <span class="text">Add</span>
+          </button>
+          <table>
+            <thead class='text-center'>
+              <tr role="row">
+                <th style='width: 350px;'>Book Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th style='width: 150px;'>Amount</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="purchaseLines"
+              *ngFor="let item of lineArray.controls; let i = index">
+              <tr [formGroupName]="i">
+                <td >
+                  <select formControlName="bookId">
+                    <option *ngFor="let item of allBooks " [value]='item.bookId'>{{item.bookName}}</option>
+                  </select>
+                </td>
+                <td>
+                  <input type="number" formControlName="quantity" min="1" >
+                </td>
+                <td>
+                  <input type="number" formControlName="rate" min="0" >
+                </td>
+                <td class='text-right p-10' >
+                  <input type="number" formControlName="itemTotal" readonly >
+                </td>
+                <td *ngIf="lineArray.length>1">
+                  <!-- <button type="button" class="btn btn-sm btn-info btn-circle"><i class="ti-plus"></i> </button> -->
+                  <button type="button" class="btn btn-sm btn-danger btn-circle" (click)="removePurchaseLine(i)"><i
+                      class="ti-close"></i> </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <hr>
+      <div class='row b-b-gray'>
+        <div class='text-center col-lg-6 col-md-6'>
+          <h4>Payment</h4>
+        </div>
+        <div class='text-center col-lg-6 col-md-6'>
+          <h4>Purchse Summary</h4>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-7 row b-r-gray'>
+          <div class='payment-container'>
+            <mat-form-field>
+              <mat-label>Payment Method</mat-label>
+              <mat-select id='p-method' formControlName="paymentMethod" (selectionChange)='setPaymentValidators($event.value)' >
+                <mat-option value="Cash">Cash</mat-option>
+                <mat-option value="Cheque">Cheque</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field [hidden]="purchaseForm.get('paymentMethod').value!=='Cheque'">
+              <mat-label>Bank Name</mat-label>
+              <input matInput formControlName="bankName">
+            </mat-form-field>
+            <mat-form-field [hidden]="purchaseForm.get('paymentMethod').value!=='Cheque'">
+              <mat-label>Cheque No</mat-label>
+              <input matInput formControlName="transactionId">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Payment Note</mat-label>
+              <textarea matInput formControlName="paymentNote">
+              </textarea>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class='col-md-5' style='font-weight: bold; padding: 25px'>
+          <div class='row' style='margin-bottom: 10px'>
+            <div class='col-md-8 '>Total Amount </div>
+            <div class='col-md-4'><input number formControlName="totalAmount" class='form-control-sm text-right'
+                style='width: 120px;' min="0" readonly ></div>
+          </div>
+          <div class='row' style='margin-bottom: 10px'>
+            <div class='col-md-4'>Vat </div>
+            <div class='col-md-4'>
+              <!-- <input [(ngModel)]="purchase.vat" class='form-control-sm' style='width: 75px;' type="number">% -->
+            </div>
+            <div class='col-md-4'><input formControlName="vatAmount"  class='form-control-sm text-right'
+                style='width: 120px;' type="number" min="0"></div>
+          </div>
+          <div class='row b-b-gray' style='margin-bottom: 10px;'>
+            <div class='col-md-4'>Discount </div>
+            <div class='col-md-4'>
+              <!-- <input [(ngModel)]="purchase.discount" class='form-control-sm' style='width: 75px;' type="number">% -->
+            </div>
+            <div class='col-md-4'><input type="number" min="0" formControlName="discountAmount" class='form-control-sm text-right'
+                style='width: 120px;' ></div>
+          </div>
+          <div class='row' style='margin-bottom: 10px'>
+            <div class='col-md-8'>Net Payable </div>
+            <div class='col-md-4 text-right'>{{netAmount}}</div>
+          </div>
+        </div>
+        <input type="number" class="no-border" formControlName="amount" style="display: none">
+      </div>
+      <hr>
+      <div class='row'>
+        <div class='col-md-8'></div>
+        <div class="col-md-4 row button-group">
+          <div class="col-md-6">
+            <button type="submit" class="btn btn-block btn-outline-success">Submit</button>
+          </div>
+          <div class=" col-md-6">
+            <button type="reset" class="btn btn-block btn-outline-secondery" >Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

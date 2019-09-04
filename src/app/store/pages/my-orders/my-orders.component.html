@@ -1,0 +1,166 @@
+<div>
+  <img class="d-block w-100" src="../../../../assets/images/slider/slider1.jpg" alt="" style="height: 200px">
+</div>
+
+<div style="margin-top: 20px">
+  <div class="row container-fluid">
+    <!-- Column -->
+    <div class="col-md-10 col-lg-10 offset-1">
+      <div class="card">
+        <div class="card-header bg-info">
+          <h5 class="m-b-0 text-white">My Orders</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table product-overview text-center">
+              <thead>
+                <tr>
+                  <th>OrderId</th>
+                  <th>Order Date</th>
+                  <th>Order Status</th>
+                  <th>Total Price</th>
+                  <th style="text-align:center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of orders">
+                  <td>{{item.orderId}}</td>
+                  <td>{{item.orderDate | date:'mediumDate'}}</td>
+                  <td>{{item.orderStatus}}</td>
+                  <td><span>&#2547;&nbsp;{{item.netAmount}}</span></td>
+                  <td align="center" class="font-500"> <button class="btn btn-rounded btn-success"
+                      (click)='viewData(item.orderId)'>View</button> </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="modal fade" id="OrderDetailsModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static"
+  data-keyboard="false">
+  <div class="modal-dialog modal-xl modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Order Details (<b>Order ID:</b> # {{order.orderId}})</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+            aria-hidden="true">×</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-sm-12">
+            <p class="pull-right"><b>Date: {{today | date:'shortDate'}}</b> </p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4" style="border-right: 1px solid black; padding-left: 10px;">
+              <h5 style='color:rgb(20, 94, 179)'> Order Info </h5>
+            <b>Order Id:</b> #{{order.orderId}}<br>
+            <b>Date:</b> {{order.orderDate | date:'shortDate'}}<br>
+            <b>Order Status:</b> {{order.orderStatus}}<br>
+          </div>
+
+          <div class="col-md-4" style='border-right: 1px solid black;'>
+            <h5 style='color:rgb(20, 94, 179);'> Customer Details </h5>
+            <address>
+              <strong>{{order.firstName}} {{order.lastName}}</strong>
+              <br>{{order.userPhone}}
+              <br>Email: {{order.userEmail}}
+              <br>Phone: {{order.userPhone}}
+            </address>
+          </div>
+          <div class="col-md-4" >
+            <h5 style='color:rgb(20, 94, 179);'> Shipping Details </h5>
+            <address>
+              <strong>{{order.name}}</strong>
+              <br><b>Email:</b> {{order.email}}
+              <br> <b>Phone:</b> {{order.phone}}
+              <br><b>District:</b> {{order.district}}
+              <br><b>Address</b>: {{order.address}}
+            </address>
+          </div>
+        </div>
+
+        <br>
+        <div class="row">
+          <div class="col-sm-12 col-xs-12">
+            <div class="table-responsive">
+              <table class="table bg-gray">
+                <thead>
+                  <tr class="bg-secondary">
+                    <th>#Sl No</th>
+                    <th>Book Name</th>
+                    <th>Quantity</th>
+                    <th>Rate </th>
+                    <th>Item Total</th>
+                  </tr>
+                </thead>
+                <tbody *ngFor="let item of orderLines; let i=index;">
+                  <tr>
+                    <td> {{i+1}}</td>
+                    <td>{{item.bookName}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.rate}}</td>
+                    <td>{{item.itemTotal}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-6 col-sm-12 col-xs-12" style='padding-left: 80px'>
+            <h5 style='color:rgb(20, 94, 179);'>Payment Info:</h5>
+            <address>
+              <span><b> Payment Method</b>: {{order.paymentMethod}}</span><br>
+              <span ><b> Payment Amount</b> : {{order.amount}}</span> <br>
+              <!-- <span *ngIf="!!order.bankName"><b> Bank Name</b>: {{order.bankName}}</span> <br> -->
+              <span *ngIf="!!order.accountNo"><b> Account No</b>: {{order.accountNo}}</span> <br>
+              <span *ngIf="!!order.transactionId"> <b>Transaction No.</b> : {{order.transactionId}}</span> <br>
+ 
+            </address>
+          </div>
+          <div class="col-md-6 col-sm-12 col-xs-12">
+            <div class="table-responsive">
+              <table class="table">
+                <tbody>
+                  <tr>
+                    <th>Net Total Amount: </th>
+                    <td></td>
+                    <td class='text-right'>{{order.amount}}</td>
+                  </tr>
+                  <tr>
+                    <th>Discount:</th>
+                    <td> <b>(-)</b> </td>
+                    <td class="text-right"> 0.00</td>
+                  </tr>
+                  <tr>
+                    <th>Vat:</th>
+                    <td><b>(+)</b></td>
+                    <td class="text-right">
+                      0.00
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Purchase Total:</th>
+                    <td></td>
+                    <td class="text-right">{{order.amount}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

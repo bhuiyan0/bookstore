@@ -1,0 +1,47 @@
+.bg-root {
+  background-image: url(../../assets/images/bg/bg-04.jpg);
+   width: 100%;
+   position: fixed;
+   top: 0;
+   left: 0; 
+   height: 100%; 
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+ }
+ 
+ @media screen and (max-width: 1024px) { /* Specific to this particular image */
+   img.bg {
+     left: 50%;
+     margin-left: -512px;   /* 50% */
+   }
+}
+
+
+
+.center-div {
+  background-color:whitesmoke  ;
+  width: 400px;
+  height: 300px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.inner-div {
+  display: inline-block;
+  padding: 50PX;
+}
+
+/* .switch-field {
+	display: flex;
+	margin-bottom: 36px;
+	overflow: hidden;
+} */
+
+.switch-radio input:checked + label {
+	background-color: red;
+	box-shadow: none;
+}

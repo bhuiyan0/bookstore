@@ -1,0 +1,21 @@
+<div class="card"></div>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12 ">
+      <div class="example-form center">
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="search your favorite author" type="search" [(ngModel)]="search">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="col-lg-2  m-b-40" *ngFor="let item of authors | async | filter : search">
+      <a href="javascript:void(0)">
+        <img src="../../../../assets/images/gallery/author.png" class="img-circle" width="150"
+          (click)='authorDetails(item.authorId)'>
+      </a>
+      <h4 class="text-center">{{item.authorName}}</h4>
+    </div>
+  </div>
+
+</div>

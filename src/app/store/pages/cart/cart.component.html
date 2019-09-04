@@ -1,0 +1,87 @@
+<div class="card"></div>
+<div class="container-fluid">
+  <div class="row">
+    <!-- Column -->
+    <div class="col-md-9 col-lg-9">
+      <div class="card">
+        <div class="card-header bg-info">
+          <h5 class="m-b-0 text-white">Your Cart ({{cartlistCount}} items)</h5>
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+                  <ng-template #nodata>
+              <h3 class="row offset-1">There is no book in your Cart</h3>
+            </ng-template>
+            <table class="table product-overview text-center" *ngIf="cartlistCount>0; else nodata">
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Book Name</th>
+                  <th>Written By</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th *ngIf="!editMode" style="text-align:center">Total</th>
+                  <th *ngIf="!editMode" style="text-align:center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of cart">
+                  <td width="150"><img src="../../../../assets/book.png" alt="iMac" width="80"></td>
+                  <td width="225">
+                    <h5 class="font-500">{{item.bookName}}</h5>
+                  </td>
+                  <td width="225">
+                    <h5 class="font-500">{{item.authorName}}</h5>
+                  </td>
+                  <td><span>&#2547;&nbsp;</span> {{item.price}}</td>
+                  <td width="70">
+                    <input type="number" readonly min="1" class="form-control"  value="{{item.quantity}}">
+                  </td>
+                  <td *ngIf="!editMode" width="150" align="center" class="font-500"><span>&#2547;&nbsp;</span> {{item.total}}</td>
+                  <td *ngIf="!editMode" align="center"><a href="javascript:void(0)" class="text-inverse" title="Delete" data-toggle="tooltip"
+                     (click)='remove(item.cartId)'><i class="ti-trash text-dark"></i></a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <hr>
+            <!-- <button class="btn btn-danger pull-right" *ngIf="!editMode" type='submit'><i
+                class="fa fa fa-shopping-cart"></i>
+              Submit</button> -->
+            <button class="btn btn-danger pull-right" *ngIf="!editMode" [disabled]='cartlistCount<=0' routerLink="/store/checkout"><i
+                class="fa fa fa-shopping-cart"></i>
+              Checkout</button>
+            <!-- <button class="btn btn-info pull-right" type='button' *ngIf="!editMode"><i
+                class="fa fa fa-shopping-cart"></i>
+              Update Cart</button> -->
+            <button class="btn btn-dark btn-outline" *ngIf="!editMode" routerLink="/store"><i class="fa fa-arrow-left"></i> Continue
+              shopping</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Column -->
+    <div class="col-md-3 col-lg-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">CART SUMMARY</h5>
+          <hr>
+          <small>Total Price</small>
+          <h2>{{cartTotal}}</h2>
+          <hr>
+          <button class="btn btn-success mr-1" [disabled]='cartlistCount<=0' routerLink="/store/checkout">Checkout</button>
+          <!-- <button class="btn btn-secondary btn-outline">Cancel</button> -->
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">For Any Support</h5>
+          <hr>
+          <h4><i class="ti-mobile"></i> +8801742793518 </h4> <small>Please contact with us if you have any
+            questions. We are avalible 24h.</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,254 @@
+<nav class="navbar navbar-expand-lg navbar navbar-info bg-success fixed-top">
+  <a class="navbar-brand text-white" routerLink="/store">Online Book Shop</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link text-white" routerLink="/store">Home <span class="sr-only">(current)</span></a>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          Author
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a href="javascript:void(0)" class="dropdown-item" (click)='authorDetails(item.authorId)'
+            *ngFor="let item of sortedAuthor">{{item.authorName}}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" routerLink="authorList" style="color: rgb(53, 178, 250)">See More....</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          Category
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a href="javascript:void(0)" class="dropdown-item" (click)='categoryDetails(item.categoryId)'
+            *ngFor="let item of sortedCategory">{{item.categoryName}}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" routerLink="categoryList" style="color: rgb(53, 178, 250)">See More....</a>
+        </div>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          Publisher
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a href="javascript:void(0)" class="dropdown-item" (click)='publisherDetails(item.publisherId)'
+            *ngFor="let item of sortedPublisher">{{item.publisherName}}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" routerLink="publisherList" style="color: rgb(53, 178, 250)">See More....</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" routerLink="aboutus">About Us</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-white" routerLink="feedback">Contact Us</a>
+      </li>
+    </ul>
+
+
+    <button class="btn btn-light my-2 my-sm-0 display-4" routerLink="cart" *ngIf="isLoggedIn">
+      <i class="icon-basket"></i>
+    </button>
+
+    <div class="btn-group m-l-10" *ngIf="isLoggedIn">
+      <button class="btn btn-success my-2 my-sm-0 dropdown-toggle" type="button" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false">
+        <i class=" ti-user"></i> {{firstName}}
+      </button>
+      <div class="dropdown-menu" x-placement="bottom-start"
+        style="position: absolute; transform: translate3d(0px, 44px, 0px); top: 0px; left: 0px; will-change: transform;">
+        <a class="dropdown-item" routerLink="profile">Profile</a>
+        <a class="dropdown-item" routerLink='cart'>Cart</a>
+        <a class="dropdown-item" routerLink='wishlist'>Wishlist</a>
+        <a class="dropdown-item" routerLink='myOrders'>My Orders</a>
+        <a class="dropdown-item" href="javascript:void(0)" (click)="signout()">Sign Out</a>
+      </div>
+    </div>
+
+    <!--This is important. and is not to be delete-->
+    <button class="btn btn-success my-2 my-sm-0 m-l-10 " *ngIf="!isLoggedIn" type="button" (click)='openModal()'>
+      Sign In
+    </button>
+  </div>
+</nav>
+
+<!--Sign In Modal Start-->
+<div class="modal fade" id="signInModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Sign In / Register</h2>
+        <button type="button" class="close" title="Close" (click)='closeModal()'>
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+          <div class="card-body">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active show" data-toggle="tab" href="#home" role="tab" aria-selected="true"><span
+                    class="hidden-sm-up"><i class="icon-user m-r-5"></i></span>
+                  <span class="hidden-xs-down">Login</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#profile" role="tab" aria-selected="false"><span
+                    class="hidden-sm-up"><i class="icon-user m-r-5"></i></span>
+                  <span class="hidden-xs-down">Registration</span></a>
+              </li>
+            </ul>
+
+            <!-- Login Form -->
+            <div class="tab-content tabcontent-border">
+              <div class="tab-pane active show" id="home" role="tabpanel">
+                <form class="form-horizontal form-material" [formGroup]='loginForm' (ngSubmit)='login()'>
+                  <div class="form-group ">
+                    <div class="col-xs-12">
+                      <input class="form-control" type="text"  placeholder="Username" formControlName='userName'/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-xs-12">
+                      <input class="form-control" type="password" placeholder="Password"  formControlName='password'/>
+                    </div>
+                  </div>
+                  <!-- <div class="form-group row">
+                    <div class="col-md-12">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck1" />
+                        <label class="custom-control-label" for="customCheck1">Remember me</label>
+                        <a href="javascript:void(0)" id="to-recover" class="text-dark pull-right"><i
+                            class="fa fa-lock m-r-5"></i> Forgot pwd?</a>
+                      </div>
+                    </div>
+                  </div> -->
+                  <div class="form-group text-center">
+                    <div class="col-xs-12 p-b-20">
+                      <button class="btn btn-block btn-lg btn-info btn-rounded" type="submit">
+                        Log In
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Register Form -->
+              <div class="tab-pane p-20" id="profile" role="tabpanel">
+                <form [formGroup]="registerForm" (ngSubmit)="register()" class="form-horizontal form-material">
+                  <div class="form-group row">
+                    <div class="col-xs-6">
+                      <input formControlName='firstName' class="form-control p-1" type="text" required=""
+                        placeholder="User name" />
+                      <div class="text-danger" *ngIf="((registerForm.get('firstName').touched ||
+                       registerForm.get('firstName').dirty) &&
+                       registerForm.get('firstName').errors)">
+                        <span *ngIf="registerForm.get('firstName').errors.required">
+                          First Name is required
+                        </span>
+                      </div>
+                    </div>
+                    <div class="col-xs-6">
+                      <input formControlName='lastName' class="form-control p-1" type="text" required=""
+                        placeholder="User name" />
+                      <div class="text-danger" *ngIf="((registerForm.get('lastName').touched ||
+                      registerForm.get('lastName').dirty) &&
+                      registerForm.get('lastName').errors)">
+                        <span *ngIf="registerForm.get('lastName').errors.required">
+                          Last Name is required
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-xs-12">
+                      <input formControlName='userName' class="form-control p-1" type="text" required=""
+                        placeholder="User name" />
+                      <div class="text-danger" *ngIf="((registerForm.get('userName').touched ||
+                       registerForm.get('userName').dirty) &&
+                       registerForm.get('userName').errors)">
+                        <span *ngIf="registerForm.get('userName').errors.required">
+                          User Name is required
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group ">
+                    <div class="col-xs-12">
+                      <input formControlName='email' class="form-control p-1" type="text" required=""
+                        placeholder="Email" />
+                      <div class="text-danger" *ngIf="((registerForm.get('email').touched ||
+                      registerForm.get('email').dirty) &&
+                      registerForm.get('email').errors)">
+                        <span *ngIf="registerForm.get('email').errors.required">
+                          Email is required
+                        </span>
+                        <span *ngIf="registerForm.get('email').errors.email">
+                          Valid Email Address is required
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group ">
+                    <div class="col-xs-12">
+                      <input formControlName='password' class="form-control p-1" type="password" required=""
+                        placeholder="Password" />
+                      <div class="text-danger" *ngIf="((registerForm.get('password').touched ||
+                      registerForm.get('password').dirty) &&
+                      registerForm.get('password').errors)">
+                        <span *ngIf="registerForm.get('password').errors.required">
+                          Password is required
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="col-xs-12">
+                      <input formControlName='confirmPassword' class="form-control p-1" type="password" required=""
+                        placeholder="Confirm Password" />
+                      <div class="text-danger" *ngIf="((registerForm.get('confirmPassword').touched ||
+                      registerForm.get('confirmPassword').dirty) &&
+                      registerForm.get('confirmPassword').invalid)">
+                        <span
+                          *ngIf="registerForm.get('confirmPassword').touched && registerForm.get('confirmPassword').errors.required">
+                          Confirm Password is required
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group row">
+                    <div class="col-md-12">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="customCheck2" />
+                        <label class="custom-control-label" for="customCheck2">I agree to all Terms</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group text-center p-b-20">
+                    <div class="col-xs-12">
+                      <button class="btn btn-info btn-lg btn-block btn-rounded text-uppercase waves-effect waves-light"
+                        type="submit">
+                        Sign Up
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--Sign In Modal End-->
